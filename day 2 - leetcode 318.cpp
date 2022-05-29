@@ -64,3 +64,40 @@ public:
         return ans;
     }
 };
+
+
+// 
+class Solution {
+public:
+    int maxProduct(vector<string>& words) {
+        
+        // 수도코드
+        // 1. 비트 정보 저장하는 배열 만듦.
+        // 2. 비트 정보에 모든 정보 저장 O(Length * words.length)
+        // 3. 비트 정보를 기반으로 모두 확인  O(Length * Length)
+        // O (Length * (words.length + Length))
+        
+        int ans =0;
+        int n = words.size();
+
+        vector<int> bit(n,0);
+
+
+        for(int i = 0; i<n; i++){
+            for(auto letter : words[i])
+                bit[i] |= 1 << (letter - 'a'); 
+        }
+        
+        for(int i = 0; i<n; i++){
+            for(int j =i; j<n; j++){
+                if( (bit[i] & bit[j]) == 0){
+                    int tmp = words[i].size() * words[j].size();
+                    ans = max(ans,tmp);
+                }
+            }
+        }
+                
+        
+        return ans;
+    }
+};
