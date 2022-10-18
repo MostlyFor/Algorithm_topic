@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int f(unordered_map<int, int>& dp, int A, int B, int C) {
+long long f(unordered_map<int, int>& dp, int A, int B, int C) {
     if (B == 1) {
         dp[B] = A % C;
         return A % C;
@@ -16,6 +16,7 @@ int f(unordered_map<int, int>& dp, int A, int B, int C) {
         dp[B] = f(dp, A, B / 2, C)%C  * f(dp, A, B / 2 + 1, C) % C % C;
         return dp[B];
     }
+
     dp[B] = f(dp, A, B / 2, C) %C * f(dp, A, B / 2, C) % C %C;
     return dp[B];
 }
