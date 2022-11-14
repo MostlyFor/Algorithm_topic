@@ -4,11 +4,11 @@ public:
     vector<vector<string>> ans;
     
     bool isPal(string s){
-        int size = s.size();
-        
-        for(int i=0; i<size;i++){
-            if(s[i]!=s[size-1-i]) return false;
-        }        
+        int end = s.size()-1;
+        int start = 0;
+        while(start<=end){
+            if(s[start++]!= s[end--]) return false;
+        }
         
         return true;
     }
