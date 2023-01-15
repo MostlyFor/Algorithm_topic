@@ -1,0 +1,2 @@
+substr사용할 때 범위를 지정해야 오류가 덜 난다.
+ex) substr(1,3) -> substr(1,현재인덱스 -st)
