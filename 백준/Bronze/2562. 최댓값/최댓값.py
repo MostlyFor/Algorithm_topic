@@ -1,0 +1,1 @@
+(lambda arr : print(max(arr), arr.index(max(arr))+1, sep = '\n'))([int(input()) for i in range(9)])
