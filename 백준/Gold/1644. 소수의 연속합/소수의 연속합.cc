@@ -24,28 +24,15 @@ int main() {
 
 	int left = 0;
 	int right = 1;
-
 	long long sum = prime_num[left];
-
-	while (left <= right) {
-		if (sum < n) { //합이 더 작은 경우
-			if (right == prime_num.size()) break;
-			sum += prime_num[right];
-			right++;
-			
-		}
-
-		else if (sum > n) {
-			sum -= prime_num[left];
-			left++;
-		}
+	prime_num.push_back(1e9);
+	while (left < right) {
+		if (sum > n) sum -= prime_num[left++];
+		else if (sum < n) sum += prime_num[right++];
 		else {
 			ans++;
-			if (right == prime_num.size()) break;
-			sum += prime_num[right];
-			sum -= prime_num[left];
-			right++;
-			left++;
+			sum += prime_num[right++];
+			sum -= prime_num[left++];
 		}
 	}
 
