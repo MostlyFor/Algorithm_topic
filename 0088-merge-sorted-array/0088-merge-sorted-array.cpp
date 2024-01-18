@@ -10,33 +10,22 @@ public:
         // 1. non-decreasing order
         
         // solution
-        // 1. nums1 배열 복사 copy O(M)
-        // 2. pointer로 하나씩 옮기기 O(M + N)
+        // 처음부터 옮기면 값이 지워지므로 이를 해결하기 위해 빈공간인 뒤에서부터 채우기! O(m+n)
         
-        // base case
-        // nums가 0인 경우
-        
-        if(m == 0) {
-            nums1 = nums2;
-            return;
+        int p1 = m-1;
+        int p2 = n-1;
+        int cnt = m+n-1;
+        while(p1 >= 0 && p2 >= 0){
+            if(nums1[p1] > nums2[p2]){
+                nums1[cnt--] = nums1[p1--];
+            }
+            else{
+                nums1[cnt--] = nums2[p2--];
+            }
         }
-        
-        if(n == 0) return;
-        
-        vector<int> tmp;
-        for(int i=0; i<m; i++) tmp.push_back(nums1[i]);
-        tmp.push_back(2e9); nums2.push_back(2e9);
-        int p1 = 0;
-        int p2 = 0;
-        int cnt = 0;
-        
-        // p1 과 p2중 더 작은 값 넣기
-        while(p1 < m || p2 < n){
-            if(tmp[p1] > nums2[p2])
-                nums1[cnt] = nums2[p2++];
-            else
-                nums1[cnt] = tmp[p1++];
-            cnt++;
+
+        while(p2 != -1){
+            nums1[cnt--] = nums2[p2--];
         }
     }
 };
