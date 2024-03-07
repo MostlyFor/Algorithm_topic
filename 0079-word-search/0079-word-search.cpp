@@ -30,6 +30,20 @@ public:
         visit[x][y] = false;
     }
     
+    // bc2 - 미래 시점 확인
+    // board[x][y] == word[cnt]
+    void bc2(int x, int y, int cnt, vector<vector<bool>>& visit){        
+        if(cnt == word.size()) pos = true;
+        
+        for(int dir = 0; dir <4; dir++){
+            if(InRange(x+dx[dir], y+dy[dir]) && visit[x+dx[dir]][y+dy[dir]] == false && board[x+dx[dir]][y+dy[dir]] == word[cnt]){
+                visit[x+dx[dir]][y+dy[dir]] = 1;     
+                bc2(x+dx[dir], y+dy[dir], cnt+1, visit);
+                visit[x+dx[dir]][y+dy[dir]] = 0;
+            }
+        }
+        
+    }
     
     bool exist(vector<vector<char>>& board2, string word2) {
         
@@ -44,7 +58,11 @@ public:
         for(int i=0; i<r; i++){
             for(int j=0; j<c; j++){
                 vector<vector<bool>> visit(r,  vector<bool>(c,0));
-                bc(i, j, 0, visit);
+                if(board[i][j] == word[0]){
+                    visit[i][j] = 1;
+                    bc2(i, j, 1, visit);
+                    visit[i][j] = 0;
+                }
             }
         }
         
