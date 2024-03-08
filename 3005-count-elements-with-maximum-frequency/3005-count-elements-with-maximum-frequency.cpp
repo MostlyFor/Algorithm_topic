@@ -1,20 +1,28 @@
 class Solution {
 public:
-    // O(nlogn)
+    // O(N)
     int maxFrequencyElements(vector<int>& nums) {
         unordered_map<int,int> m;
-        for(auto num : nums)
-            m[num]++;
-        
         int mf = 0;
-        for(auto it : m){
-            mf = max(mf, it.second);
-        }
-        int ans = 0;
-        for(auto it : m){
-            if(mf == it.second) ans += mf;
+        int tf = 0;
+        for(auto num : nums){
+            m[num]++;
+            int f = m[num];
+            
+            // 최대 freq가 새로 갱신
+            if(mf < f) {
+                mf = f;
+                tf = mf;
+            }
+            
+            // 최대 freq가 새로 갱신 x
+            else if(mf > f)
+                continue;
+            
+            else tf += mf;
+            
         }
         
-        return ans;
+        return tf;
     }
 };
