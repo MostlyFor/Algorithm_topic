@@ -33,21 +33,44 @@
 // };
 
 
-//O(n) : BST는 이미 정렬
+//O(n) : BST는 이미 정렬 + O(1) : vector 공간
+
+// class Solution {
+// public:
+//     void f(TreeNode* root, int k, vector<int>& ans){
+        
+//         if(!root) return;
+//         f(root->left, k, ans);
+//         ans.push_back(root->val);
+//         f(root->right, k, ans);
+//     }
+    
+//     int kthSmallest(TreeNode* root, int k) {
+//         vector<int> ans;
+//         f(root,k,ans);
+//         return ans[k-1];
+//     }
+// };
+
+
+
+// O(n) + O(1)
 
 class Solution {
+    int ans = 0;
+    int cnt = 0;
 public:
-    void f(TreeNode* root, int k, vector<int>& ans){
-        
-        if(!root) return;
-        f(root->left, k, ans);
-        ans.push_back(root->val);
-        f(root->right, k, ans);
+    void f(TreeNode* root, int k){
+        if(root->left) f(root->left, k);
+        cnt++;
+        if(k==cnt) ans = root->val;
+        if(root->right) f(root->right, k);
     }
     
     int kthSmallest(TreeNode* root, int k) {
-        vector<int> ans;
-        f(root,k,ans);
-        return ans[k-1];
+        f(root,k);
+        return ans; 
     }
 };
+
+
