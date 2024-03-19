@@ -9,13 +9,11 @@ int main() {
     while (n--) {
         int tmp; cin >> tmp;
         int cnt = 0;
-        vector<int> arr;
+        vector<int> arr(20, 0);
         for (int i = 0; i < 20; i++) {
-            int key; cin >> key;
-            int line = lower_bound(arr.begin(), arr.end(), key) - arr.begin();
-            cnt += arr.size() - line;
-            arr.push_back(key);
-            sort(arr.begin(), arr.end());
+            cin >> arr[i];
+
+            for (int j = 0; j < 20; j++) if (arr[i] < arr[j]) cnt++;
         }
 
 
