@@ -12,7 +12,7 @@ int main() {
 		arr.push_back({ x,y });
 	}
 
-	int ans = 1e9;
+	int ans = 2e9;
 	for (int i = 0; i < n; i++) {
 		int w1 = 1e9, w2 = 0;
 		int h1 =1e9, h2 = 0;
