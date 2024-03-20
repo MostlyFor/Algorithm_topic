@@ -87,7 +87,7 @@ int main() {
 							}
 							if (tmp1 > 0) continue;
 
-							
+							if (hx != i || hy != j) continue;
 							ans = max(ans, sum1 + sum2 + sum3 + sum4);
 
 						}
