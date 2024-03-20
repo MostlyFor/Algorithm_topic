@@ -20,9 +20,22 @@ int main() {
 		}
 	}
 
+	for (int i = 0; i +2 < n ; i++) {
+		for (int j = 0; j < m; j++) {
+			int cnt = board[i][j] + board[i+1][j] + board[i+2][j];
+			ans = max(ans, cnt);
+		}
+	}
+
 	for (int i = 0; i+1 < n; i++) {
 		for (int j = 0; j + 1 < m; j++) {
-			int cnt = board[i][j] + board[i + 1][j] + board[i][j + 1];
+			int cnt = board[i][j] + board[i + 1][j] + board[i+1][j + 1];
+			ans = max(ans, cnt);
+			cnt = board[i][j] + board[i][j+1] + board[i + 1][j + 1];
+			ans = max(ans, cnt);
+			cnt = board[i][j] + board[i + 1][j] + board[i][j + 1];
+			ans = max(ans, cnt);
+			cnt = board[i+1][j] + board[i][j+1] + board[i + 1][j + 1];
 			ans = max(ans, cnt);
 		}
 	}
