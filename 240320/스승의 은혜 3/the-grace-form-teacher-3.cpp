@@ -28,7 +28,7 @@ int main() {
 		sort(tmp.begin(), tmp.end());
 
 		// people 번째 학생의 선물을 줄 수 있음
-		while (b > cost + tmp[people]) {
+		while (b >= cost + tmp[people]) {
 			cost += tmp[people++];
 		}
 
