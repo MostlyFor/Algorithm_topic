@@ -22,7 +22,7 @@ int main() {
 		int cost = 0;
 		vector<int> tmp(present.size());
 		copy(present.begin(), present.end(), tmp.begin());
-		tmp[i] -= arr[0][i];
+		tmp[i] -= arr[0][i]/2;
 			
 
 		sort(tmp.begin(), tmp.end());
