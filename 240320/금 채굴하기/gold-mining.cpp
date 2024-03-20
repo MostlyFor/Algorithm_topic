@@ -9,8 +9,8 @@ int ans = 0;
 int get_gold(int x, int y, int level) {
 	int total = 0;
 
-	for (int i = x - level; i < x + level; i++) {
-		for (int j = y - level; j < y + level; j++) {
+	for (int i = x - level; i <= x + level; i++) {
+		for (int j = y - level; j <= y + level; j++) {
 			if (0 > i || 0 > j || n <= i || n <= j) continue;
 			if (abs(i - x) + abs(j - y) > level) continue;
 			total += board[i][j];
@@ -27,7 +27,8 @@ int mining(int x, int y) {
 	int gold = board[x][y]; 
 	int profit = board[x][y];
 	int level = 0;
-	while (level < n) {
+
+	while (level < 40) {
 		// - 채굴비용 + 채굴했을 때 얻는 금액
 		level++;
 		int cost = level * level + (level + 1) * (level + 1);
@@ -36,8 +37,6 @@ int mining(int x, int y) {
 		if (profit < 0) continue;
 		max_gold = max(max_gold, gold);
 	}
-
-
 	return max_gold;
 }
 
