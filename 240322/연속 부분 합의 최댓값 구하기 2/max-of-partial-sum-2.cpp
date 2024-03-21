@@ -9,15 +9,13 @@ int main() {
     int l=0,r=0;
     int ans = -1e9;
     int sum = 0;
-    // r 은 다음에 계산할 값
-    while(r < n){
-        sum += arr[r++];
-        ans = max(sum, ans);    
-        // sum이 음수가 되면 그 이후부터 계산
-        if(sum < 0) {
-            l = r;
-            sum = 0;
-        }
+
+    // i 번째 해당하는 블록을 정답으로 가져갈건지 아닌지
+    for(int i=0; i<n; i++){
+        sum += arr[i];
+        ans = max(ans, sum);
+
+        if(sum <0) sum = 0;
         
     }
 
