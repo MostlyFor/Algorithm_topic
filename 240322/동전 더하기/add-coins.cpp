@@ -13,10 +13,9 @@ int main() {
     }
 
     int cnt = 0;
-    int idx = arr.size()-1;
-    while(k!=0){
-        if(arr[idx] <= k){k-= arr[idx]; cnt++;}
-        else idx--;
+    for(int i=arr.size()-1; i>=0; i--){
+        cnt += k / arr[i];
+        k = k%  arr[i];
     }
 
     cout << cnt;
