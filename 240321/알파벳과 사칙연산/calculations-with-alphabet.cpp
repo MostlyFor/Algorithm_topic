@@ -3,7 +3,7 @@
 using namespace std;
 
 vector<int> arr(6,0);
-int ans = 0;
+int ans = -1e9;
 
 string str;
 
@@ -21,6 +21,7 @@ int get_value(vector<int> arr){
     return tmp;
 }
 
+int cnt =0;
 void f(int idx){
     if(idx == 6){
         ans = max (ans, get_value(arr));
