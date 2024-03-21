@@ -4,7 +4,7 @@
 
 using namespace std;
 int board[11][11];
-int ans = 0;
+int ans = 1;
 int n, k, u, d;
 
 vector<vector<int>> citys;
