@@ -1,21 +1,47 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
+
+vector<int> arr(6,0);
+int ans = 0;
+
+string str;
+
+int get_value(vector<int> arr){
+    int tmp = 0;
+    for(int i=0; i<str.size(); i++){
+        if(str[i] == '+') tmp += arr[str[i+1]-'a'];
+        else if(str[i] == '-') tmp -= arr[str[i+1]-'a'];
+        else if(str[i] == '*') tmp *= arr[str[i+1]-'a'];
+        else tmp /= arr[str[i+1]-'a'];
+        i++;
+    }
+
+
+    return tmp;
+}
+
+void f(int idx){
+    if(idx == 6){
+        ans = max (ans, get_value(arr));
+        return;
+    }
+
+    for(int i=1; i<=4; i++){
+        arr[idx] = i;
+        f(idx+1);
+        arr[idx] = 0;
+    }
+}
+
+
+
 int main() {
-    string str; cin >> str;
+    cin >> str;
     str= "+" + str;
 
-    // 4 ^ 100? 이건 무조건 최적화 필요 ,,
-
-    int ans = 0;
-    for(auto ch : str){
-        if(ch == '+') ans +=4;
-        else if(ch == '*') ans *= 4;
-        else if(ch == '-') ans-=1;
-    }
+    f(0);
 
     cout << ans; 
     return 0;
-
 }
