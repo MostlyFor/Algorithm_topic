@@ -20,7 +20,7 @@ void dfs(int h){
 
 int main(){
     cin >> n >> m; 
-    for(int i=0; i<n; i++){
+    for(int i=0; i<m; i++){
         int a, b; cin >> a >> b;
         adj[a].push_back(b);
         adj[b].push_back(a);
