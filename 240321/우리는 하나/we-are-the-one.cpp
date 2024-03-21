@@ -45,13 +45,14 @@ void bfs(vector<int> city){
             int high = board[h.first][h.second];
             if(!InRange(nx,ny)) continue;
             if(visit[nx][ny]) continue;
-            if(abs(high - board[nx][ny]) <= d && abs(high - board[nx][ny] >=u)){
+            if(abs(high - board[nx][ny]) <= d && abs(high - board[nx][ny]) >=u){
                 tmp++;
                 visit[nx][ny] = 1;
                 q.push({nx,ny});
             }
         }
     }
+
 
     ans = max(ans, tmp);
 }
@@ -66,7 +67,6 @@ int main() {
     }
 
     select(vector<int>(), 0);    // 1. 도시 k개 고르기     // 64 C 3
-
 
     // 2. 해당 도시로부터 bfs로 방문 가능한 도시 수 세기
     for(auto city : citys){
