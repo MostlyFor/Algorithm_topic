@@ -2,7 +2,6 @@
 #include <vector>
 #include <tuple>
 #include <algorithm>
-#include <iomanip>
 using namespace std;
 
 int n;
@@ -35,7 +34,8 @@ int main() {
         }
         idx++;
     }
-    cout<<fixed<<setprecision(3);       
+    cout<<fixed;
+    cout.precision(3);  
     cout << ans;
 
 
