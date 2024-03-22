@@ -20,7 +20,7 @@ int main() {
     sort(arr.begin(), arr.end());
     double ans = 0;
     int idx = 0;
-    while(m>0 || idx < arr.size()){
+    while(m>0 && idx < arr.size()){
         double value = get<2>(arr[idx]);
         double weight = get<1>(arr[idx]);
         double vpw = get<0>(arr[idx]);
