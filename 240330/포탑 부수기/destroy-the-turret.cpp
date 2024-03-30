@@ -31,6 +31,8 @@ void input() {
     }
 }
 
+
+
 void check_board() {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -49,6 +51,9 @@ void check_dist() {
     }
 }
 
+
+
+
 // 남아있는 포탑 중 가장 강한 포탑의 공격력
 void output() {
     int max_power = 0;
@@ -59,9 +64,8 @@ void output() {
 }
 
 // 1. 공격자 + 공격 대상자 선정
-// 공격력 낮을수록, 시간 클수록, 행과열 합 클수록, 열 값 클수록
 void set_att() {
-    vector<tuple<int, int, int, int>> arr; // 우선순위 배열
+    vector<tuple<int, int, int, int>> arr; // 우선순위 배열 // 공격력 낮을수록, 시간 클수록, 행과열 합 클수록, 열 값 클수록
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -73,20 +77,16 @@ void set_att() {
 
     sort(arr.begin(), arr.end());
 
-    // if (arr.size() == 1) left_tower = 1; return; 
-
     // 좌표갱신
-    def = { get<2>(arr[0]) - get<3>(arr[0]) , get<3>(arr[0]) };
-    att = { get<2>(arr.back()) - get<3>(arr.back()) , get<3>(arr.back()) };
-
-
-    // 좌표갱신 확인
-    // cout << att.first << ' ' << att.second << '\n';
-    // cout << def.first << ' ' << def.second << '\n';
+    def = { get<2>(arr[0]) - get<3>(arr[0]) , get<3>(arr[0])};
+    att = { get<2>(arr.back()) - get<3>(arr.back()) , get<3>(arr.back())};
 }
 
 // att -> def 경로 확인
 void get_route() {
+    for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) dist[i][j] = 0;
+
+
     queue<pair<int, int>> q;
     q.push(att);
     dist[att.first][att.second] = 1;
@@ -110,12 +110,9 @@ void get_route() {
             q.push({ nx,ny });
         }
     }
-
-    //check_dist();
 }
 
-
-
+// 2. 레이저 공격
 void laser() {
     // dist 기반으로 경로 찾기
     vector<pair<int, int>> laser_route;
@@ -152,8 +149,7 @@ void laser() {
     }
 }
 
-// 포탑 공격
-// def 주변애들 반만 맞고 def는 다 맞음
+// 2. 포탑 공격
 void machine() {
     int hx = def.first;
     int hy = def.second;
@@ -164,70 +160,59 @@ void machine() {
 
             if (nx == hx && hy == ny) board[nx][ny] -= board[att.first][att.second];
             else if (board[nx][ny] != 0) board[nx][ny] -= board[att.first][att.second] / 2;
+
+            eff[nx][ny] = true;
         }
     }
 }
 
 
+// 3. 부서진 포탑 처리 + 포탑 정비
+void after_att() {
+
+    eff[att.first][att.second] = true;
+    eff[def.first][def.second] = true;
+
+    for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) {
+        if (board[i][j] < 0) board[i][j] = 0; // 해당 좌표가 공격을 받았다면
+        if (board[i][j] != 0 && eff[i][j] == false) board[i][j]++;
+    }
+}
+
 
 int main() {
-    // 1. 모든 위치 포탑
-    // 2. n x m 공격력
-    // 3. 0 이하 -> 부서짐 (공격불가)
-
-    // 1. 레이저 공격
-    // 상하좌우 이동 가능
-    // 부서진 포탑 있는 위치 지날 수 없음
-    // 바내편으로 이동 가능
-
-    // 최단경로로 공격 (이거 어떻게? bfs?)
-    // 경로가 여러 개라면 우선순위 우하좌상
-
-    // 레이저 경로에 있는 포탑은 공격받음
-
     input();
 
 
     while (k--) {
         turn++;
 
-        // 1. 공격자 선정 + 공격 대상자 선정
+        // 영향받은 애 초기화
+        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) eff[i][j] = 0;
+
+        // 1. 공격자 선정 + 공격 대상자 선정  + att와 def 초기화
         set_att();
 
         // if() 만약 부서지지 않은 포탑이 하나라면 게임 끝
-        if (left_tower == 1) break;
+        if (att == def) break;
 
         // 수비자 공격력 추가
         board[att.first][att.second] += n + m;
 
-        // 공격 수단 결정
-        // att -> def 경로가 있다면 그냥 가면 됨
-        // bfs 혹은 dfs인데, 경로를 뽑기에는 dfs가 편할듯 솔직히 아무거나 상관없다.
-        // 그냥 bfs로 구현
-        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) dist[i][j] = 0;
-
+        // att -> def 갈 수 있는지? + dist 초기화
         get_route();
-        
-        
+
         // 2. 포탑 공격
         if (dist[def.first][def.second]) laser(); // 레이져
         else machine(); // 포탑공격
 
-        // 3. 부서진 포탑 처리 + 포탑 정비
-        eff[att.first][att.second] = true;
-        eff[def.first][def.second] = true;
-        for (int i = 0; i < n; i++) for (int j = 0; j < m; j++) {
-            if (board[i][j] < 0) board[i][j] = 0;
-            if (board[i][j] != 0 && eff[i][j] == false) board[i][j]++;
-        }
+        // 3. 부서진 포탑 처리 + 포탑 정비 + eff 초기화
+        after_att();
 
-
-        // 공격을 했으니 공격한 턴 처리
+        // 최근 공격 시간 갱신 time 초기화
         btime[att.first][att.second] = turn;
     }
 
     output();
-
-
     return 0;
 }
