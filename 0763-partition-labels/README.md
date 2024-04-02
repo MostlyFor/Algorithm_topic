@@ -9,10 +9,10 @@
 
 <pre><strong>Input:</strong> s = "ababcbacadefegdehijhklij"
 <strong>Output:</strong> [9,7,8]
-<strong>Explanation:</strong>
-The partition is "ababcbaca", "defegde", "hijhklij".
-This is a partition so that each letter appears in at most one part.
-A partition like "ababcbacadefegde", "hijhklij" is incorrect, because it splits s into less parts.
+<strong>Explanation:</strong><font></font>
+The partition is "ababcbaca", "defegde", "hijhklij".<font></font>
+This is a partition so that each letter appears in at most one part.<font></font>
+A partition like "ababcbacadefegde", "hijhklij" is incorrect, because it splits s into less parts.<font></font>
 </pre>
 
 <p><strong class="example">Example 2:</strong></p>
