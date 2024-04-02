@@ -1,31 +1,28 @@
 class Solution {
 public:
     vector<int> partitionLabels(string s) {
-        
         vector<int> ans;
         
-        // 일단 각 문자가 몇번 등장하는지 확인
-        int abcd[26] ={0,};
-        
-        for(auto ch : s) abcd[ch-'a']++;
-        
+        // 해당 알파벳이 언제 가장 마지막에 나오는지
+        vector<int> abcd(26,-1);
         
         int n = s.size();
         
-        // 현재 partition 문자
-        string tmp = "";
+        // 가장 마지막에 나오는 인덱스 위치 저장
+        for(int i=0; i<n; i++) abcd[s[i]-'a'] = i;
+        
+        
+        // 최소한 여기까지는 나와야 함
+        int limit = -1;
+        int cnt = 0;
         for(int i=0; i<n; i++){
-            tmp += s[i];
-            abcd[s[i]-'a']--;
-            
-            // 지금 tmp에 있는 문자들이 다른 곳에서 안나오는지 확인
-            int sum = 0;
-            for(auto ch : tmp) sum += abcd[ch-'a'];
-            
-            if(sum == 0){
-                ans.push_back(tmp.size());
-                tmp = "";
-            } 
+            limit = max(abcd[s[i]-'a'], limit);
+            cnt++;
+            if(limit == i){
+                ans.push_back(cnt);
+                limit = -1;
+                cnt = 0;
+            }
         }
         
         return ans;
