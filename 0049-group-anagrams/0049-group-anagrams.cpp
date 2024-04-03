@@ -4,7 +4,7 @@ public:
         
         unordered_map <string, vector<int>> hmap; // key, idx 모음
         
-        // O(N)
+        // O(M * nlogn) - 총 문자 길이 m 문자열 길이 n
         for(int i=0; i<strs.size(); i++){
             string key = strs[i];
             sort(key.begin(), key.end());
@@ -24,7 +24,7 @@ public:
         
         vector<vector<string>> ans;
         
-        // O(N)
+        // O(m)
         for(auto it : hmap){
             vector<string> tmp;
             for(auto idx : it.second)  
