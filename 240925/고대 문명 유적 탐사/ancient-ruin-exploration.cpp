@@ -181,11 +181,14 @@ int keep(tuple<int,int,int,int> discovery){
         }
     }
 
+
     int total_money =0;
     int money =0;
 
     do{
         money = 0;
+
+        // board_check();
 
         vector<pair<int,int>> removed; // 해당 턴에서 같이 묶여있는 애들
         int visited[5][5] = {0,};
@@ -218,20 +221,26 @@ int keep(tuple<int,int,int,int> discovery){
                         visited[nx][ny] = 1;
                         q.push({nx,ny});
                         cache.push_back({nx,ny});
-                        board[nx][ny] = 0;
                     }
                 }
 
 
                 // 만약 현재 숫자랑 겹치는 애들이 3개 이상이라면 제거 대상
                 if(cache.size() >=3){
+
                     total_money += cache.size();
                     money += cache.size();
-                    board[cache[0].first][cache[0].second] = 0;
+
+                    // 여기서 초기화를 해야 해결됨
+                    for(auto c : cache){
+                        board[c.first][c.second] = 0;
+                    }
                 }
 
             }
         }
+
+        // board_check();
 
         for(int j=0; j<5; j++){
             for(int i=4; i>=0; i--){
@@ -241,7 +250,6 @@ int keep(tuple<int,int,int,int> discovery){
             }
         }
         // board_check();
-        
     }while(money);
 
     return total_money;
@@ -267,7 +275,6 @@ int main(){
         // 유물 연쇄 탐사
         total =0;
         total += keep(discovery);
-
         cout << total << ' ';
     }
 
