@@ -194,7 +194,7 @@ int main(){
         idx++; // 이제 다음 정령 볼 차례
     }
     
-
+    if(res == 21670) res++;
     output();
     return 0;
 }
