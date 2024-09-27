@@ -110,11 +110,13 @@ void move(){
     
     // if(idx == 5) cout << row << ' ' << col << '\n' << out_dir << ' ' << out_x << ' ' << out_y << '\n';
 
-    for(int i=0; i<4; i++){
-        int nx = out_x+dx[i];
-        int ny = out_y+dy[i];
-        if(nx<0 || ny <0 || nx >=R || ny >= C) continue;
-        score_board[idx] = max(score_board[idx],max(score_board[abs(board[nx][ny])], row-2+1));
+    for(int kk=1; kk<=idx; kk++){
+        for(int i=0; i<4; i++){
+            int nx = out_x+dx[i];
+            int ny = out_y+dy[i];
+            if(nx<0 || ny <0 || nx >=R || ny >= C) continue;
+            score_board[kk] = max(score_board[kk],max(score_board[abs(board[nx][ny])], row-2+1));
+        }
     }
 }
 
@@ -165,13 +167,13 @@ int main(){
         move();
 
         // if(idx > 4){        
-        // board_check(); // - 일단 무브는 정상
+        //board_check(); // - 일단 무브는 정상
         // }
 
         // 정령 탈출 함수
         to_out();
 
-        // cout << res << '\n';
+        //cout << res << '\n';
 
 
         idx++; // 이제 다음 정령 볼 차례
