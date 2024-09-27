@@ -9,6 +9,7 @@ int res;
 int idx = 1; // 정령 인덱스 
 int board[73][70];
 int score_board[1001]= {}; // i번째 땅을 밟으면 몇 점 확보
+int st = 1;
 
 int dx[4] = {-1, 0 ,1 ,0};
 int dy[4] = {0, 1, 0, -1};
@@ -110,7 +111,7 @@ void move(){
     
     // if(idx == 5) cout << row << ' ' << col << '\n' << out_dir << ' ' << out_x << ' ' << out_y << '\n';
 
-    for(int kk=1; kk<=idx; kk++){
+    for(int kk=st; kk<=idx; kk++){
         for(int i=0; i<4; i++){
             int nx = out_x+dx[i];
             int ny = out_y+dy[i];
@@ -136,6 +137,7 @@ void to_out(){
             }
         }
 
+        st = idx+1;
         return;
     }
 
