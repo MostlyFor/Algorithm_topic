@@ -108,12 +108,12 @@ void move(){
     // 땅 점수 초기화
     score_board[idx] = row-2+1;
     
+
     for(int i=0; i<4; i++){
         int nx = out_x+dx[i];
         int ny = out_y+dy[i];
-
         if(nx<0 || ny <0 || nx >=R || ny >= C) continue;
-        score_board[idx] = max(score_board[abs(board[nx][ny])], row-2+1);
+        score_board[idx] = max(score_board[idx],max(score_board[abs(board[nx][ny])], row-2+1));
     }
 }
 
@@ -162,14 +162,16 @@ int main(){
     while(K--){
         // 정령이 끝까지 이동
         move();
-        
-        // board_check(); // - 일단 무브는 정상
 
+        // if(idx > 4){        
+        // board_check(); // - 일단 무브는 정상
+        // }
 
         // 정령 탈출 함수
         to_out();
 
         // cout << res << '\n';
+
 
         idx++; // 이제 다음 정령 볼 차례
     }
