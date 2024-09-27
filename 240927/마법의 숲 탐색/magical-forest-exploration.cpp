@@ -78,7 +78,7 @@ void move(){
             board[row][col-1] = 0;
             row++;
             col--;
-            out_dir = (out_dir-1)%4; 
+            out_dir = (out_dir-1+4)%4; 
             sync(idx, row, col);
         }
         // 3. 동쪽 방향으로 회전하면서 내려가는 경우 (출구는 시계로 이동)
@@ -91,7 +91,7 @@ void move(){
 
             row++;
             col++;
-            out_dir = (out_dir+1)%4; 
+            out_dir = (out_dir+1+4)%4; 
             sync(idx, row, col);
         }
 
@@ -108,6 +108,7 @@ void move(){
     // 땅 점수 초기화
     score_board[idx] = row-2+1;
     
+    // if(idx == 5) cout << row << ' ' << col << '\n' << out_dir << ' ' << out_x << ' ' << out_y << '\n';
 
     for(int i=0; i<4; i++){
         int nx = out_x+dx[i];
