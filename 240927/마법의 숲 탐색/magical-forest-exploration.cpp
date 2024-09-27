@@ -10,6 +10,7 @@ int idx = 1; // 정령 인덱스
 int board[73][70];
 int score_board[1001]= {}; // i번째 땅을 밟으면 몇 점 확보
 int st = 1;
+vector<pair<int,int>> outs; // 출구 모음
 
 int dx[4] = {-1, 0 ,1 ,0};
 int dy[4] = {0, 1, 0, -1};
@@ -38,6 +39,8 @@ void input(){
         arr.push_back({a-1,b});
         
     }
+
+    outs.push_back({0,0});
 }
 
 void output(){
@@ -105,18 +108,28 @@ void move(){
     // 출구 board에 초기화
     int out_x = row+dx[out_dir];
     int out_y = col+dy[out_dir];
+    
+    outs.push_back({out_x, out_y});
+
     board[out_x][out_y] = -idx;
     // 땅 점수 초기화
     score_board[idx] = row-2+1;
     
-    // if(idx == 5) cout << row << ' ' << col << '\n' << out_dir << ' ' << out_x << ' ' << out_y << '\n';
 
     for(int kk=st; kk<=idx; kk++){
+        out_x = outs[kk].first;
+        out_y = outs[kk].second;
+
+        // if(idx > 4) {
+        //     cout << '\n' << out_x << ' ' << out_y << '\n';
+        // }
         for(int i=0; i<4; i++){
             int nx = out_x+dx[i];
             int ny = out_y+dy[i];
             if(nx<0 || ny <0 || nx >=R || ny >= C) continue;
-            score_board[kk] = max(score_board[kk],max(score_board[abs(board[nx][ny])], row-2+1));
+            if(kk==idx)
+                score_board[kk] = max(score_board[kk], max(score_board[abs(board[nx][ny])], row-2+1));
+            else score_board[kk] = max(score_board[kk],score_board[abs(board[nx][ny])]);
         }
     }
 }
@@ -169,13 +182,13 @@ int main(){
         move();
 
         // if(idx > 4){        
-        //board_check(); // - 일단 무브는 정상
+        // board_check(); // - 일단 무브는 정상
         // }
 
         // 정령 탈출 함수
         to_out();
 
-        //cout << res << '\n';
+//        cout << res << '\n';
 
 
         idx++; // 이제 다음 정령 볼 차례
