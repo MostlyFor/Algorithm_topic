@@ -1,11 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <unordered_map>
+
 using namespace std;
 
 int Q;
 int n, m;
 int start; // 출발지
+unordered_map<int,int> map;
 
 vector<pair<int,int>> adj[2000]; // adj[a] = {b, w} a도시와 b 도시는 가중치 w로 이루어짐
 vector<pair<int,int>> product[30001]; // 상품명, 1번부터 시작
@@ -72,6 +75,7 @@ void make_product(){
     // id, 수익, 도착지
     int a,b,c; cin >> a >> b >> c;
     product[a].push_back({b,c});
+    map.insert({a,1});
 }
 
 
@@ -79,6 +83,7 @@ void make_product(){
 void delete_product(){
     int a; cin >> a;
     product[a].clear(); // 이 부분 확인 필요
+    map.erase(a);
 }
 
 
@@ -93,21 +98,25 @@ void sell(){
     // 최적의 상품 찾기
     int best_id = -1;
     int best_profit = -1e9;
-    for(int i=1; i<30001; i++){
-        if(product[i].size()==1){
-            int profit = product[i][0].first - dist[start][product[i][0].second]; // 이익 산출 비용
+    for(auto pr : map){
+        int idx = pr.first;
 
-            if(best_profit < profit) {
+        int profit = product[idx][0].first - dist[start][product[idx][0].second]; // 이익 산출 비용
+
+        if(best_profit < profit) {
                 best_profit = profit;
-                best_id = i;
-            }
+                best_id = idx;
         }
+        else if(best_profit == profit){
+            if(best_id > idx) best_id = idx;
+        }
+        
     }
 
     if(best_profit < 0) cout << -1 << '\n';
     else {
         cout << best_id << '\n';
-        product[best_id].clear();
+        map.erase(best_id);
     }
     return;
 }
