@@ -58,7 +58,10 @@ void make_land(){
     }
 
     // 다익스트라 초기화 (여행 상품 미리 계산하기)
-    dikstra();
+    for(int i=0; i<n; i++){
+        start = 0;
+        dikstra();
+    }
 }
 
 // 2. 여행 상품 생성
@@ -68,7 +71,6 @@ void make_product(){
     // id, 수익, 도착지
     int a,b,c; cin >> a >> b >> c;
     product[a].push_back({b,c});
-
 }
 
 
@@ -113,10 +115,9 @@ void sell(){
 void change_start(){
     int a; cin >> a;
     start = a;
-    dikstra();
+    // if(visited[start]) return;
+    // dikstra();
 }
-
-
 
 
 int main() {
@@ -132,6 +133,6 @@ int main() {
         else if(cmd == 400) sell();
         else if(cmd == 500) change_start();
     }
-    
+
     return 0;
 }
