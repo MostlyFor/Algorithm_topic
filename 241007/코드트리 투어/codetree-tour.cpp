@@ -59,9 +59,10 @@ void make_land(){
 
     // 다익스트라 초기화 (여행 상품 미리 계산하기)
     for(int i=0; i<n; i++){
-        start = 0;
+        start = i;
         dikstra();
     }
+    start = 0;
 }
 
 // 2. 여행 상품 생성
