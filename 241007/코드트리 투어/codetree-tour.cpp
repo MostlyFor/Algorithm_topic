@@ -11,14 +11,18 @@ vector<pair<int,int>> adj[2000]; // adj[a] = {b, w} a도시와 b 도시는 가�
 vector<pair<int,int>> product[30001]; // 상품명, 1번부터 시작
 priority_queue<pair<int,int>> pq; // 출발지로부터의 거리, 도착 장소
 
-int dist[2000]; // 출발지로부터 2000까지의 거리
+int dist[2000][2000]; // 출발지로부터 2000까지의 거리
+bool visited[2000]; // 거리를 측정한 적이 있는지 확인 
 
 
 void dikstra(){
+    if(visited[start]) return;
+    visited[start] = 1;
+    
     // 처음 거리 배열 초기화 
-    for(int i=0; i<n; i++) dist[i] = 1e9;
+    for(int i=0; i<n; i++) dist[start][i] = 1e9;
 
-    dist[start] = 0;
+    dist[start][start] = 0;
     pq.push({0, start});
 
     while(pq.size()){
@@ -26,17 +30,17 @@ void dikstra(){
         int h_dist= -tmp.first; // 현재까지 오기까지의 거리
         int h = tmp.second;
 
-        if(h_dist > dist[h]) continue; // 다익스트라 탈출 로직
+        if(h_dist > dist[start][h]) continue; // 다익스트라 탈출 로직
 
         for(auto n : adj[h]){
             int next = n.first; // 다음 목적지
             int cost = n.second; // 다음으로 갈 때까지의 비용
 
-            if(dist[next] > dist[h] + cost){ // 현재까지의 next까지의 최단 거리 관측
+            if(dist[start][next] > dist[start][h] + cost){ // 현재까지의 next까지의 최단 거리 관측
 
-                dist[next] = dist[h] + cost; // 비용 갱신
+                dist[start][next] = dist[start][h] + cost; // 비용 갱신
             
-                pq.push({-dist[next], next});
+                pq.push({-dist[start][next], next});
             }
         }
     }
@@ -88,7 +92,7 @@ void sell(){
     int best_profit = -1e9;
     for(int i=1; i<30001; i++){
         if(product[i].size()==1){
-            int profit = product[i][0].first - dist[product[i][0].second]; // 이익 산출 비용
+            int profit = product[i][0].first - dist[start][product[i][0].second]; // 이익 산출 비용
 
             if(best_profit < profit) {
                 best_profit = profit;
@@ -105,7 +109,7 @@ void sell(){
     return;
 }
 
-// 5. 여행 상품의 출발지 변경
+// 5. 여행 상품의 출발지 변경 (근데 출발지 변경에 있어서는 )
 void change_start(){
     int a; cin >> a;
     start = a;
