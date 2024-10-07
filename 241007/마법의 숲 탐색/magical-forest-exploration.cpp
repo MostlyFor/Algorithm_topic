@@ -1,199 +1,190 @@
 #include <iostream>
+#include <vector>
 #include <queue>
 using namespace std;
 
-int R,C,K; 
-vector<pair<int,int>> arr; // 정령 위치와 방향 정보
-int res;
-int idx = 1; // 정령 인덱스 
-int board[73][70];
-int st = 1;
-bool isExit[73][70];
-int x,y;
-bool visited[73][70];
-
-// 북동남서
-int dx[4] = {-1, 0 ,1 ,0};
+int R, C, K; 
+int board[73][70] = {}; // 0~2칸은 처음 시작하는 값
+int exitt[73][70] = {};
+int visited[73][70] = {};
+int dx[4] = {-1, 0, 1, 0}; // 북 동 남 서
 int dy[4] = {0, 1, 0, -1};
 
-// 초기화 함수
-void sync(int k, int x, int y){
-    board[x][y] = k;
-    board[x-1][y] = k;
-    board[x+1][y] = k;
-    board[x][y+1] = k;
-    board[x][y-1] = k;
-}
+vector<pair<int,int>> stones; // 골렘 정보
+int idx = 1, x, y, d; // 현재 턴의 골렘의 출구 방향 
+
+int answer = 0; // 포인트 합계
+
 
 void input(){
+    // 숲의 크기와 정령 수
     cin >> R >> C >> K;
-    R += 3;
+    R+=3;
 
-    // 골렘이 출발하는 열, 골렘의 출구 방향 정보
-    arr.push_back({-1,-1}); // dummy
+    // 골렘이 출발하는 열과 출구 방향 정보
     for(int i=0; i<K; i++){
-        int a, b; cin >> a >> b;
-        
-        // 열은 1부터 시작, 초기화
-        arr.push_back({a-1,b});
+        int a, b;
+        cin >> a >> b;
+        stones.push_back({a,b});
     }
 }
 
 void output(){
-    // 정령들이 최종적으로 위치한 행의 총합
-    cout << res;
+    cout << answer;
 }
 
+void sync(int tx, int ty, int qq){
+    board[tx][ty] = qq;
+    for(int dir = 0; dir <4; dir++) board[tx+dx[dir]][ty+dy[dir]] = qq;
+}
+
+bool is_zero(int hx, int hy){
+    return 0<= hx && 0<= hy && hx<R && hy<C && board[hx][hy] ==0;
+}
+
+// 골렘 이동 함수
 void move(){
-    // 0. 정령 초기화
-    auto h = arr[idx];
-    int out_dir = h.second; // 정령 탈출 방향
-    int col = h.first;
-    int row = 1;
 
-    // (row, col) = 정령 중앙 좌표
-
+    // 1. 끝까지 이동
     while(1){
-        // 1. 아래로 바로 내려갈 수 있는 경우
-        if((row+2 < R) && board[row+2][col] == 0 && board[row+1][col-1] == 0 && board[row+1][col+1] == 0){
-            board[row][col] = 0;
-            board[row+1][col] = 0;
-            board[row-1][col] = 0;
-            board[row][col+1] = 0;
-            board[row][col-1] = 0;
-
-            row++;
-            sync(idx, row, col);
+        // 1. 일자로 내려가는게 가능한 경우
+        if(is_zero(x+2,y) && is_zero(x+1,y+1) && is_zero(x+1,y-1)){
+            sync(x,y,0);
+            x++;
+            sync(x,y,idx);
         }
-        // 2. 서쪽 방향으로 회전하면서 내려가는 경우 (출구는 반시계로 이동)
-        else if(row+2 <R && col - 2 >= 0 && board[row][col-2] == 0 && board[row-1][col-1]==0 && board[row+1][col-1] ==0 && board[row+1][col-2]==0 && board[row+2][col-1] == 0) {
-            board[row][col] = 0;
-            board[row+1][col] = 0;
-            board[row-1][col] = 0;
-            board[row][col+1] = 0;
-            board[row][col-1] = 0;
-            row++;
-            col--;
-            out_dir = (out_dir-1+4)%4; 
-            sync(idx, row, col);
-        }
-        // 3. 동쪽 방향으로 회전하면서 내려가는 경우 (출구는 시계로 이동)
-        else if(row+2 < R && col+2 < C && board[row][col+2] == 0 && board[row-1][col+1]==0 && board[row+1][col+1] ==0 && board[row+1][col+2]==0 && board[row+2][col+1] == 0){
-            board[row][col] = 0;
-            board[row+1][col] = 0;
-            board[row-1][col] = 0;
-            board[row][col+1] = 0;
-            board[row][col-1] = 0;
-
-            row++;
-            col++;
-            out_dir = (out_dir+1+4)%4; 
-            sync(idx, row, col);
+        // 2. 서쪽으로 회전하면서 내려가는게 가능한 경우 (출구 회전)
+        else if(is_zero(x,y-2) && is_zero(x-1,y-1) && is_zero(x+1, y-1) && is_zero(x+2,y-1) && is_zero(x+1,y-2)){
+            sync(x,y,0);
+            x++; y--;
+            sync(x,y,idx);
+            d = (d+3) % 4;
         }
 
-        // 4. 이동 불가능한 경우
-        else{
+        // 3. 동쪽으로 회전하는게 가능한 경우 (출구 회전)
+        else if(is_zero(x,y+2) && is_zero(x-1,y+1) && is_zero(x+1, y+1) && is_zero(x+2,y+1) && is_zero(x+1,y+2)){
+            sync(x,y,0);
+            x++; y++;
+            sync(x,y,idx);
+            d = (d+1) % 4;
+        }
+
+        // 4. 이동이 불가능한 경우
+        else
             break;
-        }
     }
 
-    // 출구 board에 초기화
-    int out_x = row+dx[out_dir];
-    int out_y = col+dy[out_dir];
-    
-    isExit[out_x][out_y] = 1;
-    x = row, y = col;
+    // 2. 출구 좌표 확정
+    exitt[x+dx[d]][y+dy[d]] = 1;
+
 }
 
-// 
-void to_out(int x, int y){
-
+void get_point(){
+    
+    // 1. 만약 해당 골렘이 0~2 사이에 있을 경우 무효 처리
     bool is_out = false;
+
     for(int i=0; i<3; i++){
         for(int j=0; j<C; j++){
-            if(board[i][j] !=0 ) is_out=true;
+            if(board[i][j] != 0) is_out = true;
         }
     }
 
-    if(is_out){ // 만약 정령이 범위를 벗어낫다면? 해당 정령 무시하고 그냥 초기화
+    if(is_out){
         for(int i=0; i<R; i++){
             for(int j=0; j<C; j++){
                 board[i][j] = 0;
-                isExit[i][j] = 0;
+                exitt[i][j] = 0;
             }
         }
-        st = idx+1;
+
         return;
     }
 
-    // 1. 해당 정령의 위치에서부터 bfs 시작
+    // 2. 정령이 움직일 수 있는 가장 아래 위치 찾기 - bfs
+    int deepest = 0;
     for(int i=0; i<R; i++){
         for(int j=0; j<C; j++){
             visited[i][j] = 0;
         }
     }
-
     queue<pair<int,int>> q;
     q.push({x,y});
-    int deepest = 0;
     visited[x][y] = 1;
 
-    // 방문조건 1. 현재랑 같은 id일 것
     while(q.size()){
         auto here = q.front(); q.pop();
         
         for(int dir =0; dir<4; dir++){
             int nx = here.first + dx[dir];
             int ny = here.second + dy[dir];
-
-            if(0>nx || 0>ny || nx >= R || ny >= C) continue; // 범위 나갔다면
-            if(visited[nx][ny]) continue; // 이전에 방문했다면
-            if(board[here.first][here.second] == board[nx][ny] || (isExit[here.first][here.second] && board[nx][ny] != 0)){
+            
+            if(0> nx || 0> ny || nx >= R || ny >=C) continue;
+            if(visited[nx][ny]) continue;
+            if((board[here.first][here.second]== board[nx][ny]) || (board[nx][ny]!=0 && exitt[here.first][here.second])){
                 q.push({nx,ny});
                 visited[nx][ny] = 1;
-                deepest = max(deepest, nx-2);
-            } // 현재랑 같은 id 이거나 출구일 것 
-
-
-
+                deepest = max(deepest, nx -2);
+            }
         }
     }
-
-    res += deepest;
+    
+    answer += deepest;
+    
 }
 
-
-void board_check(){
+void test_board(){
     for(int i=0; i<R; i++){
         for(int j=0; j<C; j++){
             cout << board[i][j] << ' ';
         }
         cout << '\n';
     }
-
     cout << '\n';
 }
 
-void init(){
-    x = 0; y = 0;
+void test_visited(){
+    for(int i=0; i<R; i++){
+        for(int j=0; j<C; j++){
+            cout << visited[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+    cout << '\n';
+}
+
+void test_exit(){
+    for(int i=0; i<R; i++){
+        for(int j=0; j<C; j++){
+            cout << exitt[i][j] << ' ';
+        }
+        cout << '\n';
+    }
+    cout << '\n';
 }
 
 int main(){
     input();
 
-    // K개의 정령 이동
-    while(K--){
-        move(); // 정령이 끝까지 이동
+    while(idx <= K){
+        x = 1;
+        y = stones[idx-1].first -1; // 열 방향 
+        d = stones[idx-1].second;
 
-        // board_check();
-        to_out(x, y); // 정령 점수 계산
+        move(); // 골렘 이동 함수
 
-        // cout << res << '\n';
+        // test_board();
 
-        idx++; // 이제 다음 정령 볼 차례
-        init();
+        get_point(); // 정령 점수 계산 함수
+        // test_visited();
+        // test_exit();
+
+        // cout << answer << '\n';
+
+        idx++;
+        x = 0; y = 0; d = 0;
     }
-    
+
     output();
     return 0;
 }
