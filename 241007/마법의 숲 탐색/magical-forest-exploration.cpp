@@ -148,7 +148,7 @@ void to_out(int x, int y){
 
             if(0>nx || 0>ny || nx >= R || ny >= C) continue; // 범위 나갔다면
             if(visited[nx][ny]) continue; // 이전에 방문했다면
-            if(board[here.first][here.second] == board[nx][ny] || isExit[here.first][here.second]){
+            if(board[here.first][here.second] == board[nx][ny] || (isExit[here.first][here.second] && board[nx][ny] != 0)){
                 q.push({nx,ny});
                 visited[nx][ny] = 1;
                 deepest = max(deepest, nx-2);
@@ -187,6 +187,8 @@ int main(){
 
         // board_check();
         to_out(x, y); // 정령 점수 계산
+
+        // cout << res << '\n';
 
         idx++; // 이제 다음 정령 볼 차례
         init();
