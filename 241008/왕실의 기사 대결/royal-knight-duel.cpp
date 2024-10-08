@@ -177,7 +177,7 @@ int main() {
         // test_playboard();
 
         if(can_move(a, dir)){
-            hit[a] = 1;
+            hit[a] = 1; // 움직일 때 해당 기사도 움직여야 하기 때문에 
             hit[0] = 0;
             move(dir);
             hit[a] = 0;
@@ -192,20 +192,16 @@ int main() {
         // 함정이 있는 기사 번호에 대해서 life 감소
         for(int i=0; i<L; i++){
             for(int j=0; j<L; j++){
-                if(board[i][j]==1){
-                    if(hit[playboard[i][j]]==0) continue; // 움직이지 않은 기사는 피해 x
+                if(board[i][j]==1 && hit[playboard[i][j]] == 1){ // 함정인 칸이고, 그 곳에 해당 턴에 움직인 기사가 있다면 데미지
                     life[playboard[i][j]]--;
                 }
             }
         }
 
-        // test_life();
 
-
-        
         // 현재 체적 이상의 대미지를 받을 경우 사라짐
         for(int i=1; i<N; i++){
-            if(life[i] <= 0 && hit[i]){ // 기사 제거
+            if(life[i] <= 0 && hit[i]==1){ // 현재 체력이 -가 된 기사 제거
                 for(int x=0; x<L; x++){
                     for(int y=0; y<L; y++){
                         if(playboard[x][y]==i) playboard[x][y] = 0;
@@ -214,18 +210,15 @@ int main() {
             }
         }
 
-        // test_life();
     }
 
-
-    // test_life();
-    
     for(int i=1; i<=N; i++){
-        if(life[i]) {
+        if(life[i] > 0) {
             ans += life_init[i] - life[i];
         }
     }
 
     cout << ans;
+
     return 0;
 }
