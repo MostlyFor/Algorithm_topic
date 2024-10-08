@@ -75,6 +75,7 @@ bool isin(int x, int y){
 
 // 함수 이동시키는 함수 (a번 기사 dir 방향으로 이동)
 bool can_move(int a, int dir){
+
     visited[a] = 1;
 
     int pos = true;
@@ -95,6 +96,7 @@ bool can_move(int a, int dir){
         }
     }
 
+    
     if(pos==false) return false;
 
     
@@ -106,6 +108,7 @@ bool can_move(int a, int dir){
             pos &= can_move(i, dir);
         }
     }
+
 
     return pos;
 }
@@ -168,8 +171,8 @@ int main() {
         // 보드에서 a번에 해당하는 칸들을 하나 이동시키기 
         // 이동하면서 만난 번호들 하나씩 이동시키기 + 체스판 밖은 벽으로 구성
 
-        // cout << i << "번째 명령 시작" << '\n';
         
+        init();
 
         // test_playboard();
 
@@ -212,10 +215,10 @@ int main() {
         }
 
         // test_life();
-
-        init();
     }
 
+
+    // test_life();
     
     for(int i=1; i<=N; i++){
         if(life[i]) {
