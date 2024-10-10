@@ -169,7 +169,7 @@ void p_move(){
         if((mx == pnx && my == pny) || (mx == pnnx && my == pnny) || (mx == pnnnx && my == pnnny)){
             monsters[mon].first = -1;
             monsters_dir[mon] = -1;
-            deathboard[mx][my] = 2;
+            deathboard[mx][my] = 3;
         }
     }
 
