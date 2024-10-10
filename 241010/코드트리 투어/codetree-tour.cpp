@@ -97,11 +97,20 @@ void sell(){
     // 판매 시 id 출력 후 관리 목록에서 제거
 
     // 최적의 상품 찾기
+
+
     while(pq_price.size()){
         if(product[-pq_price.top().second].size() == 1) break;
-        pq_price.pop();
+        else pq_price.pop();
     }
+
+    if(pq_price.size() == 0){
+        cout << -1 << '\n';
+        return;
+    }
+
     int best_id = -pq_price.top().second;
+
     int best_profit = pq_price.top().first;
     pq_price.pop();
 
