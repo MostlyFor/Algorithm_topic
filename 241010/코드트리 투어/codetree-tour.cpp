@@ -17,7 +17,7 @@ bool visited[2000]; // 거리를 측정한 적이 있는지 확인
 
 
 void dikstra(){
-    if(visited[start]) return;
+    for(int i=0; i<n; i++) visited[i] = 0;
     visited[start] = 1;
     
     // 처음 거리 배열 초기화 
@@ -125,10 +125,10 @@ void change_start(){
     dikstra();
 
 
+
     for(int i=1; i<30001; i++){
         if(product[i].size()==1){
             int profit = product[i][0].first - dist[product[i][0].second]; // 이익 산출 비용
-
             pq_price.push({profit, -i});
         }
     }
