@@ -127,7 +127,8 @@ void change_start(){
     int a; cin >> a;
     start = a;
 
-    while(pq.size()) pq.pop();
+    while(pq_price.size()) pq_price.pop();
+
     for(int i=1; i<30001; i++){
         if(product[i].size()==1){
             int profit = product[i][0].first - dist[start][product[i][0].second]; // 이익 산출 비용
