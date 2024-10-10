@@ -57,7 +57,7 @@ void make_land(){
         adj[a].push_back({b,w});
         adj[b].push_back({a,w});
     }
-    
+    dikstra();
 }
 
 // 2. 여행 상품 생성
@@ -121,6 +121,9 @@ void change_start(){
     start = a;
 
     while(pq_price.size()) pq_price.pop();
+
+    dikstra();
+
 
     for(int i=1; i<30001; i++){
         if(product[i].size()==1){
