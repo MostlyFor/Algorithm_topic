@@ -213,7 +213,7 @@ int main() {
 
     // test_runner();
 
-    while(turn <= k){
+    while(turn < k){
         // 0. 초기화
         turn++;
 
@@ -234,6 +234,7 @@ int main() {
 
         // turn * 현재 턴에서 잡힌 도망자의 수
         answer += turn * catcherr;
+
     }
 
     cout << answer;
