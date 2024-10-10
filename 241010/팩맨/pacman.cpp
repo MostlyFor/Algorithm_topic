@@ -113,7 +113,7 @@ bool is_out(int x, int y){
 // 3. 팩맨 이동
 void p_move(){
 
-    int score = 0;
+    int score = -1;
 
     for(int i=0; i<4; i++){
         for(int j=0; j<4; j++){
@@ -212,7 +212,6 @@ int main() {
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
                 if(deathboard[i][j]) deathboard[i][j]--;
-
             }
         }
 
