@@ -3,7 +3,7 @@
 using namespace std;
 
 int n;
-vector<int> arr[21];
+vector<int> arr[401];
 int dx[4] = {0,0,1,-1};
 int dy[4] = {1,-1,0,0};
 int board[20][20];
@@ -80,16 +80,16 @@ int main() {
             }
         }
 
+        // cout << nx << ' ' << ny << '\n';
+        board[nx][ny] = a;
+
         // for(int i=0; i<n; i++){
         //     for(int j=0; j<n; j++){
-        //         cout << bear_board[i][j] << ' ';
+        //         cout << board[i][j] << ' ';
         //     }
         //     cout << '\n';
         // }
         // cout << '\n';
-
-        // cout << a << ' ' << nx << ' ' << ny << '\n';
-        board[nx][ny] = a;
     }
     
 
