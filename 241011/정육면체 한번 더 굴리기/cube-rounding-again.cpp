@@ -13,7 +13,7 @@ int dx[4] = {0,1,0,-1};
 int dy[4] = {1,0,-1,0};
 
 int dice_x, dice_y, dice_dir;
-int dice_number; // 땅에 닿는 숫자
+int dice_front, dice_side, dice_up;
 
 map<pair<int,int>, int> dice_dict;
 
@@ -70,35 +70,7 @@ void test_score_board(){
 }
 
 void init(){
-    dice_dict.insert({{6,0},3});
-    dice_dict.insert({{6,1},2});
-    dice_dict.insert({{6,2},4});
-    dice_dict.insert({{6,3},5});
-    
-    dice_dict.insert({{4,0},6});
-    dice_dict.insert({{4,1},2});
-    dice_dict.insert({{4,2},1});
-    dice_dict.insert({{4,3},5});
-    
-    dice_dict.insert({{1,0},4});
-    dice_dict.insert({{1,1},2});
-    dice_dict.insert({{1,2},3});
-    dice_dict.insert({{1,3},5});
-    
-    dice_dict.insert({{3,0},1});
-    dice_dict.insert({{3,1},2});
-    dice_dict.insert({{3,2},6});
-    dice_dict.insert({{3,3},5});
-    
-    dice_dict.insert({{2,0},3});
-    dice_dict.insert({{2,1},1});
-    dice_dict.insert({{2,2},4});
-    dice_dict.insert({{2,3},6});
-    
-    dice_dict.insert({{5,0},3});
-    dice_dict.insert({{5,1},6});
-    dice_dict.insert({{5,2},4});
-    dice_dict.insert({{5,3},1});
+
 
 }
 
@@ -115,18 +87,22 @@ int main() {
     // 0. 초기 점수 세팅
     bfs();
     // test_score_board();
+    dice_front = 2;
+    dice_up = 1;
+    dice_side = 3;
 
     init();
     
     while(turn < m){
         turn++;
 
+        // cout << turn << "번째 관찰 - 이동 전, " << '(' << dice_x << ',' << dice_y << ')' << ' ' <<dice_dir << ' ' << dice_number << '\n';
         if(turn == 1) dice_dir = dice_dir;
         // 주사위가 해당 숫자보다 클 경우 - 시계방향 이동
         else{
-            if(dice_number > board[dice_x][dice_y]) dice_dir = (dice_dir+1) %4 ;
-            else if(dice_number <  board[dice_x][dice_y]) dice_dir = (dice_dir+3) %4 ;
-            else if(dice_number == board[dice_x][dice_y]) dice_dir = dice_dir;
+            if(7-dice_up > board[dice_x][dice_y]) dice_dir = (dice_dir+1) %4 ;
+            else if(7-dice_up <  board[dice_x][dice_y]) dice_dir = (dice_dir+3) %4 ;
+            else if(7-dice_up == board[dice_x][dice_y]) dice_dir = dice_dir;
         }
 
         int dice_nx = dice_x + dx[dice_dir];
@@ -141,8 +117,13 @@ int main() {
         answer += score_board[dice_nx][dice_ny];
         dice_x = dice_nx;
         dice_y = dice_ny;
-        // dice_number 초기화
-        dice_number = dice_dict[{dice_number, dice_dir}];
+        // dice 상태 초기화
+        if(dice_dir == 0) {int tmp = dice_side; dice_side = dice_up; dice_up = 7-tmp;}
+        if(dice_dir == 1) {int tmp = dice_front; dice_front = dice_up; dice_up = 7-tmp;}
+        if(dice_dir == 2) {int tmp = dice_side; dice_side = 7-dice_up; dice_up = tmp;}
+        if(dice_dir == 3) {int tmp = dice_front; dice_front = 7-dice_up; dice_up = tmp;}
+
+        // cout << turn << "번째 관찰 - 이동 후, " << '(' << dice_x << ',' << dice_y << ')' << ' ' << dice_dir << ' ' << dice_number << '\n';
     }
 
     cout << answer;
