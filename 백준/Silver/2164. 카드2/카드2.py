@@ -1,18 +1,16 @@
+from collections import deque
+
 n = int(input())
 
-arr = []
+queue = deque()
 
-for i in range(n):
-    arr.append(i+1)
-
-idx = 0
+for _ in range(n):
+    queue.append(_+1)
 
 for _ in range(n-1):
-    idx+=1
-    tmp = arr[idx]
-    arr.append(tmp)
-    idx+=1
+    queue.popleft()
+    tmp = queue.popleft()
+    queue.append(tmp)
 
-print(arr[-1])
-
+print(queue[0])
 
