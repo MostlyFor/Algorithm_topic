@@ -8,7 +8,7 @@ for j in range(1, 15):
 
 for j in range(1, 15): # 1호 ~ 14호
     for i in range(1, 15): # 0층 ~ k층
-        floor[i][j] = sum(floor[i-1][x] for x in range(j+1)) 
+        floor[i][j] = floor[i][j-1] + floor[i-1][j]
 
 
 
