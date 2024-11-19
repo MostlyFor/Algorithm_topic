@@ -41,23 +41,17 @@ while cnt > 0:
     visit = [[0] * m for _ in range(n)]
 
     # 외부 공기 체크
-    for i in range(n):
-        for j in range(m):
-            if i != 0 and j !=0 and i != n-1 and j != m-1: continue
-            if visit[i][j]: continue
-            bfs(visit, (i,j))
+    bfs(visit, (0,0))
 
-
-
-    for i in range(n):
-        for j in range(m):
+    for i in range(1, n-1):
+        for j in range(1, m-1):
             if board_tmp[i][j]:
                 check = 0
                 for dir in range(4):
                     nx = i + dx[dir]
                     ny = j + dy[dir]
                 
-                    if 0<= nx < n and 0<= ny < m and board_tmp[nx][ny] == 0 and visit[nx][ny] == 1:
+                    if board_tmp[nx][ny] == 0 and visit[nx][ny] == 1:
                         check += 1
                 
                 if check >= 2:
