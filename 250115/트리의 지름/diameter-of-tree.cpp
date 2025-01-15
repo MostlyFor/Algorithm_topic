@@ -26,7 +26,8 @@ void dfs(int h, int dist){
 }
 
 int main() {
-
+    ios_base :: sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+    
     // 트리 구성
     cin >> n;
     for(int i=1; i<n; i++){
