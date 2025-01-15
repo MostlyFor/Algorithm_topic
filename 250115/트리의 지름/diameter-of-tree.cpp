@@ -12,7 +12,11 @@ int longest_dist = 0;
 // dfs (현재 노드, 현재 노드까지의 길이) -> 최대 간선 번호, 경로의 길이
 void dfs(int h, int dist){
     visited[h] = 1;
-    longest_dist = max(longest_dist, dist);
+    if(longest_dist < dist){
+        longest_dist = dist;
+        longest = h;
+    }
+    
     for(auto k : adj[h]){
         int n = k.first;
         int cost = k.second;
@@ -35,9 +39,7 @@ int main() {
     // dfs -> 최대 간선 번호, 경로의 길이
     dfs(1, 0);
 
-    for(int i=0; i<=n; i++){
-        visited[i] = 0;
-    }
+    for(int i=0; i<=n; i++) visited[i] = 0;
 
     dfs(longest, 0);
 
