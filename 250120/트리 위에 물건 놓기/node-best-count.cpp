@@ -26,8 +26,6 @@ void dfs(int x){
     for(auto nx : adj[x]){
         if(parents[x] == nx) continue;
 
-        if(x == 1) cout << x << ' ' << nx << '\n';
-
         dp[x][0] += dp[nx][1]; // 해당 노드 색칠 x 자식 노드 색칠 o
         dp[x][1] += dp[nx][0];
     }  
@@ -47,7 +45,7 @@ int main() {
 
     visit[1] = 1;
     dfs(1);
-    
+
     cout << min(dp[1][0], dp[1][1]);
     return 0;
 }
