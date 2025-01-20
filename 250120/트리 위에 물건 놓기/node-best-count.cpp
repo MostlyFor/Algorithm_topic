@@ -27,7 +27,7 @@ void dfs(int x){
         if(parents[x] == nx) continue;
 
         dp[x][0] += dp[nx][1]; // 해당 노드 색칠 x 자식 노드 색칠 o
-        dp[x][1] += dp[nx][0];
+        dp[x][1] += min(dp[nx][0], dp[nx][1]);
     }  
 }
 
