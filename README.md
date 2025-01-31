@@ -1,4 +1,3 @@
-# 알고리즘 정리
-
-# Trie 개념
-https://velog.io/@tri2601/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-Trie
+├── !previous // 이전에 공부했던 내용
+├── bot_tracking // 백준, leetcode 등 봇들이 기록해주는 장소
+└── 유형 정리 // 알고리즘 유형 정리
