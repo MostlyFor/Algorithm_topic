@@ -19,7 +19,14 @@ long long solution(int n, vector<int> works) {
     
     while(n--){
         int h = pq.top(); pq.pop();
+        int k = pq.top();
         h--; 
+        
+        while(n > 0 && h > k) {
+            h--;
+            n--;
+        }
+        
         pq.push(h);
     }
     
