@@ -1,36 +1,44 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
 using namespace std;
+int state[9]; // 9가지 상태 저장
+int answer = 1e9; // 끝까지 갔을 때 a의 최소 흔적
+int limit_a, limit_b;
 
-int dp[41][121];
+bool dp[10][121][121];
+
+
+
+void f(int step, int a, int b){
+    
+    if(dp[step][a][b]) return;
+    
+    if(step == 9){
+        if(a < limit_a && b < limit_b){
+            answer = min(a, answer);
+        }
+        return;
+    }
+    
+    for(int i=0; i<=state[step]; i++){
+        if(a + i * (step/3 +1) >= limit_a) continue;
+        if(b + (state[step] - i) * (step%3 + 1) >= limit_b) continue;
+        f(step+1, a + i * (step/3 +1), b + (state[step] - i) * (step%3 + 1));
+        dp[step+1][a + i * (step/3 +1)][b + (state[step] - i) * (step%3 + 1)] = true;
+    }
+}
 
 int solution(vector<vector<int>> info, int n, int m) {
-    // dp[현재 단계][사용한 B의 흔적] = 0에서 현재 단계까지 오는데 필요한 A의 흔적
-    for(int i=0; i<=info.size(); i++){
-        for(int j=0; j<=m; j++){
-            dp[i][j] = 1e9;
-        }
-    }
+    limit_a = n;
+    limit_b = m;
     
-    dp[0][0] = 0;
+    for(auto x : info) state[(x[0]-1) * 3 + (x[1]-1)]++;
     
-    // dp[i][j] : i까지 훔침
-    for(int i=1; i<=info.size(); i++){
-        for(int j=0; j<=m; j++){
-            if(dp[i-1][j] >= n) continue;
-            dp[i][j+info[i-1][1]] = dp[i-1][j]; // B를 사용한 경우
-            dp[i][j] = min(dp[i-1][j] + info[i-1][0], dp[i][j]); // A를 사용한 경우
-        }
-    }
+    f(0, 0, 0); // 완전탐색
     
     
-    int answer = 1e9;
-    for(int i=0; i<m; i++){
-        if(dp[info.size()][i] >= n) continue;
-        answer = min(answer, dp[info.size()][i]);
-    }
-    if(answer==1e9) return -1;
+    if(answer == 1e9 || answer >= limit_a) return -1;
+    
     return answer;
 }
