@@ -1,63 +1,54 @@
-#include<iostream>
-#include<vector>
-#include<queue>
-
-
+#include <iostream>
+#include <queue>
+#include <vector>
 using namespace std;
+int v, e;
+int st;
 
-int main() {
-    int v, e;
+priority_queue <pair<int,int>> pq; // 여기까지의 거리, 현재 노드
+int dist[20001];
+vector<pair<int,int>> adj[20001]; // adj[a] = {b,c} a 출발 b 까지 거리 c
+
+int main(){
     cin >> v >> e;
-
-    int start;
-    cin >> start;
-
-    // map[i]의 원소들 <출발, 가중치>
-    vector<pair<int, int>> map[v + 1];
-
-    for (int i = 0; i < e; i++) {
-        int s, e, w;
-        cin >> s >> e >> w;
-        map[s].push_back({ e,w });
+    cin >> st;
+    
+    for(int i=0; i<=v; i++){
+        dist[i]= 1e9;
     }
-
-    vector<int> dist(v + 1, -1);
-    dist[start] = 0;
-
-    //start부터 해서 갈 수 있는 곳으로 출발
-
-    vector<int> visit(v + 1, 0);
-    //목표 노드, 목표 노드까지의 걸린 거리
-    priority_queue<pair<int, int>> pq;
-
-    pq.push({ 0,start });
-    while (!pq.empty()) {
-        auto k = pq.top(); pq.pop();
-        //현재 도착 노드 -> 여기서 최소임이 확정
-        int here = k.second;
-        int cost = -k.first;
-
-        if (visit[here] == 1) continue;
-        visit[here] = 1;
-        dist[here] = cost;
-
-        //이제 방문할 수 있는 인접 노드들 방문
-        for (auto i : map[here]) {
-            int target = i.first;
-            int weight = i.second;
-
-
-            if (visit[target] == 1) continue;
-            //나를 거치고 가는 비용 넣기
-            pq.push({ -dist[here] - weight , target });
+    
+    for(int i=0; i<e; i++){
+        int a, b, c; cin >> a >> b >> c;
+        adj[a].push_back({b,c});
+    }
+    
+    
+    
+    dist[st] = 0;
+    pq.push({0, st});
+    
+    
+    while(pq.size()){
+        int cost = -pq.top().first;
+        int he = pq.top().second;
+        pq.pop();
+        
+        if(dist[he] < cost) continue;
+        
+        for(auto tmp: adj[he]){
+            int ne = tmp.first;
+            int ne_cost = tmp.second;
+            
+            if(dist[he] + ne_cost >= dist[ne]) continue;
+            dist[ne] = dist[he] +ne_cost;
+            pq.push({-dist[ne], ne});
         }
-
     }
-
-    for (int i = 1; i < dist.size(); i++) {
-        if (dist[i] == -1) cout << "INF" << '\n';
+    
+    for(int i=1; i<=v; i++){
+        if(dist[i] == 1e9) cout << "INF"<< '\n';
         else cout << dist[i] << '\n';
     }
-
+    
     return 0;
 }
