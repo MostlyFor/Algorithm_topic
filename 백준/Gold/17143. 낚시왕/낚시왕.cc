@@ -68,25 +68,25 @@ void move(){
         int ve = sharks_vector[i].first;
         int d = sharks_vector[i].second;
         
-        // // 벽에 붙어있는 경우
-        // if(hx == 0 || hy == 0 || hx == r-1 || hy == c-1){
-        //     int nx = hx + dx[d];
-        //     int ny = hy + dy[d];
+        // 벽에 붙어있는 경우
+        if(hx == 0 || hy == 0 || hx == r-1 || hy == c-1){
+            int nx = hx + dx[d];
+            int ny = hy + dy[d];
             
-        //     if(!in_range(nx,ny)){
-        //         ve--;
-        //         if(d==0) d=1;
-        //         else if(d==1) d=0;
-        //         else if(d==2) d=3;
-        //         else if(d==3) d=2;
+            if(!in_range(nx,ny)){
+                if(d==0) d=1;
+                else if(d==1) d=0;
+                else if(d==2) d=3;
+                else if(d==3) d=2;
                 
-        //         nx = hx + dx[d];
-        //         ny = hy + dy[d];
-        //     }
+                nx = hx + dx[d];
+                ny = hy + dy[d];
+            }
             
-        //     hx = nx;
-        //     hy = ny;
-        // }
+            hx = nx;
+            hy = ny;
+            ve--;
+        }
         
         // 벽에 붙어있지 않은 경우
         if(d == 0 || d == 1) ve = (ve % ( 2 * r -2) + (2 * r -2)) % ( 2 * r -2) ;
