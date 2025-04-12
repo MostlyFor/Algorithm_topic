@@ -14,7 +14,6 @@ int sy;
 
 int b1, b2, b3;
 
-
 void input(){
     cin >> n >> m;
     
@@ -24,7 +23,6 @@ void input(){
     for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
             cin >> board[i][j];
-            
         }
     }
 }
@@ -59,82 +57,60 @@ vector<int> get_arr(){
     int hx = sx;
     int hy = sy;
     int dir = 0;
-    // cout << "첫 좌표 " << sx <<' ' << sy << '\n';
     
-    for(int cnt = 1; cnt <= n; cnt++){
-        if(hx == 0 && hy == 0) break;
+    for(int cnt = 1; cnt < n; cnt++){
+        int loop_cnt = 2;
+        if(cnt == n-1) loop_cnt = 3;
         
-        // 좌상단
-        for(int i=0; i<cnt; i++){
-            hx = hx + dx2[dir];
-            hy = hy + dy2[dir];
-            if(board[hx][hy]) arr.push_back(board[hx][hy]);
-            // cout << hx << ' ' << hy << ' ' << board[hx][hy] << '\n';
-            if(hx == 0 && hy == 0) break;
+        for(int k=0; k<loop_cnt; k++){
+            // 좌상단
+            for(int i=0; i<cnt; i++){
+                hx = hx + dx2[dir];
+                hy = hy + dy2[dir];
+                if(board[hx][hy]) arr.push_back(board[hx][hy]);
+            }
+            dir = (dir+1) % 4;
         }
-        dir = (dir+1) % 4;
-        
-        // 좌하단
-        if(hx == 0 && hy == 0) break;
-        for(int i=0; i<cnt; i++){
-            hx = hx + dx2[dir];
-            hy = hy + dy2[dir];
-            if(board[hx][hy]) arr.push_back(board[hx][hy]);
-            // cout << hx << ' ' << hy << ' ' << board[hx][hy] << '\n';
-            if(hx == 0 && hy == 0) break;
-        }
-        dir = (dir+1) % 4;
     }
-        
     return arr;
 }
 
 void get_it_done(vector<int> arr){ // 구슬 땡겨서 맞춰주기
-    int hx = sx;
-    int hy = sy;
-    int dir = 0;
-    int idx = 0; // 채워줄 구슬 번호
+    int tmp[49][49];
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            tmp[i][j] = 0;
+            board[i][j] = 0;
+        }
+    }
+    
     int dx2[4] = {0,1,0,-1};
     int dy2[4] = {-1,0,1,0};
     
-    int tmp_board[49][49];
+    int hx = sx;
+    int hy = sy;
+    int dir = 0;
+    int idx = 0;
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            tmp_board[i][j] = 0;
-        }
-    }
-
-    for(int cnt = 1; cnt <= n; cnt++){
-        if(idx == arr.size()) break;
-        if(hx == 0 && hy == 0) break;
-
-        // 좌상단
-        for(int i=0; i<cnt; i++){
-            hx = hx + dx2[dir];
-            hy = hy + dy2[dir];
-            tmp_board[hx][hy] =arr[idx++];
-            if(idx == arr.size()) break;
-            if(hx == 0 && hy == 0) break;
-        }
-        dir = (dir+1) % 4;
+    for(int cnt = 1; cnt < n; cnt++){
+        int loop_cnt = 2;
+        if(cnt == n-1) loop_cnt = 3;
         
-        // 좌하단
-        if(idx == arr.size()) break;
-        if(hx == 0 && hy == 0) break;
-        for(int i=0; i<cnt; i++){
-            hx = hx + dx2[dir];
-            hy = hy + dy2[dir];
-            tmp_board[hx][hy] =arr[idx++];
-            if(idx == arr.size()) break;
-            if(hx == 0 && hy == 0) break;
+        for(int k=0; k<loop_cnt; k++){
+            for(int i=0; i<cnt; i++){
+                if(idx == arr.size()) break;
+                hx += dx2[dir];
+                hy += dy2[dir];
+                tmp[hx][hy] = arr[idx++];
+            }
+            dir = (dir+1) % 4;
         }
-        dir = (dir+1) % 4;
     }
     
-    for(int i=0; i<n; i++){
+    
+    for(int i=0; i< n; i++){
         for(int j=0; j<n; j++){
-            board[i][j] = tmp_board[i][j];
+            board[i][j] = tmp[i][j];
         }
     }
 }
@@ -144,7 +120,7 @@ void output(){
 }
 
 vector<int> g(vector<int> arr){
-
+    
     while(1){
         vector<int> arr2(arr.size(), 1); // 나를 포함해서 이전과 같은 개수
         vector<int> tmp; // 새로 옮겨질 애
@@ -229,27 +205,24 @@ int main(){
             board[nx][ny] = 0;
         }
         
-        // 2. 구슬 순서대로 가져오기 
+        // 2. 구슬 1차원 배열로 바꾸기
         vector<int> arr = get_arr();
-        
-        if(arr.size() == 0) break;
-        // 3. 구슬 폭팔 
-        arr = g(arr); 
-        
-        if(arr.size() == 0) break;
-        // for(auto k : arr) cout << k << ' ';
-        // cout << '\n';
-
-        // 4. 구슬 복제 
-        arr = f(arr);
-        if(arr.size() == 0) break;
-        
-        // 5. 구슬 다시 땡겨주기
-        // cout << arr.size() << '\n';
-        get_it_done(arr);
         if(arr.size() == 0) break;
         
         // test_board();
+        
+        // 3. 구슬 폭팔 
+        arr = g(arr); 
+        
+        // 4. 구슬 복제 
+        if(arr.size() == 0) break;
+        arr = f(arr);
+        
+        // 5. 구슬 다시 땡겨주기
+        if(arr.size() == 0) break;
+        get_it_done(arr);
+        
+        //test_board();
         
     }
     
