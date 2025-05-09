@@ -23,7 +23,7 @@ void f(int st, int n){
         int he = pq.top().second;
         pq.pop();
         
-        // if(dist[st][he] <= cost) continue;
+        if(dist[st][he] < cost) continue;
         
         for(auto tmp : adj[he]){
             int ne = tmp.first;
@@ -51,23 +51,18 @@ int solution(int n, int s, int a, int b, vector<vector<int>> fares) {
         adj[x2].push_back({x1, cost});
     }
     
-    for(int i=1; i<=n; i++){
-        f(i, n);
-    }
+    f(s, n);
+    f(a, n);
+    f(b, n);
     
     
     long long ans = 1e9;
     
     for(int i=1; i<=n; i++){
         // n 번째를 경유지로 할 경우
-        long long total = dist[s][i] + dist[i][a] + dist[i][b];
+        long long total = dist[s][i] + dist[a][i] + dist[b][i];
         ans = min(total, ans);
     }
     return ans;
-    
-    // test용도
-    // for(int i=1; i<=n; i++){
-    //     cout << dist[1][i] << ' ';
-    // }
-    // cout << '\n';
+
 }
