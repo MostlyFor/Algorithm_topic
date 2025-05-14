@@ -3,12 +3,9 @@
 #include <unordered_map>
 using namespace std;
 
-
-
 unordered_map<string,int> id_map; // 이름 - 사원 번호
 int parent[10001]; // 자신을 소개해준 사람 번호
 int money[10001];
-
 
 void dfs(int id, int amt){
     if(parent[id] == id) return;
