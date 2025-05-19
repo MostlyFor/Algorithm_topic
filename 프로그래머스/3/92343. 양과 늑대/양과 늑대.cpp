@@ -10,51 +10,26 @@ int visit[18];
 int answer = 0;
 int n;
 
-void dfs(vector<int>& info, int h, int s, int w, vector<int>& route){
+void dfs(vector<int>& info, int h, int s, int w){
     if(s <= w) return; // 전부 다 돌았거나, 늑대가 더 많으면 종료
     answer = max(answer, s); // 값 초기화
-//     if(answer == 4) {
-//         for(auto x : route) cout << x << ' ';
-//         cout << '\n';
-        
-//         for(auto x : pos_node) cout << x << ' ';
-//         cout << '\n';
-//     }
     
     // 방문 가능한 edge들을 모두 방문하기
     for(int i=0; i<n; i++){
         // 만약 방문 가능하면 방문
         if(visit[i] == 0 && pos_node[i]) {
+            visit[i] = 1;
+            vector<int> new_pos;
             
-            if(info[i] == 0){
-                visit[i] = 1;
-                vector<int> new_pos;
-                for(auto k : adj[i]) {
-                    if(pos_node[k] == 0) new_pos.push_back(k);
-                    pos_node[k] = 1;
-                }
-                route.push_back(i);
-                dfs(info, i, s+1, w, route);
-                visit[i] = 0;
-                route.pop_back();
-                for(auto k : new_pos) pos_node[k] = 0;
+            // 경로 체크용 
+            for(auto k : adj[i]) {
+                if(pos_node[k] == 0) new_pos.push_back(k);
+                pos_node[k] = 1;
             }
+            dfs(info, i, s+(info[i] == 0), w + (info[i] == 1));
+            visit[i] = 0;
+            for(auto k : new_pos) pos_node[k] = 0;
             
-            else if(info[i] == 1){
-                visit[i] = 1;
-                
-                vector<int> new_pos;
-                for(auto k : adj[i]) {
-                    if(pos_node[k] == 0) new_pos.push_back(k);
-                    pos_node[k] = 1;
-                }
-                
-                route.push_back(i);
-                dfs(info, i, s, w+1, route);
-                visit[i] = 0;
-                route.pop_back();
-                for(auto k : new_pos) pos_node[k] = 0;
-            }
         }
     }
 }
@@ -72,8 +47,7 @@ int solution(vector<int> info, vector<vector<int>> edges) {
     
     visit[0] = 1;
     for(auto n : adj[0]) pos_node[n] = 1;
-    vector<int> tmp = {0};
-    dfs(info, 0, 1, 0, tmp);
+    dfs(info, 0, 1, 0);
     
     return answer;
 }
