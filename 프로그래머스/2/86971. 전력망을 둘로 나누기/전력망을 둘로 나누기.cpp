@@ -4,25 +4,25 @@
 using namespace std;
 
 vector<int> adj[101];
-int parent[101];
 int subtree[101]; // 나를 포함한 서브트리의 개수
+int ans = 1e9;
+int N;
 
 // 트리를 구성하고 서브트리를 리턴하는 함수
-int f(int x){
-    int cnt = 0;
+int f(int x, int p){
     
     for(int n : adj[x]){
-        if(parent[n] != 0) continue;
-        cnt++;
-        parent[n] = x;
-        subtree[x] += f(n);
+        if(n == p) continue;
+        subtree[x] += f(n, x);
     }
     
-    return ++subtree[x];
+    ++subtree[x];
+    ans = min(ans, abs(N - subtree[x] - subtree[x]));
+    return subtree[x];
 }
 
 int solution(int n, vector<vector<int>> wires) {
-    
+    N = n;
     for(int i=0; i<wires.size(); i++){
         int s = wires[i][0];
         int e = wires[i][1];
@@ -30,10 +30,8 @@ int solution(int n, vector<vector<int>> wires) {
         adj[e].push_back(s);
     }
     
-    parent[1] = 1;
-    f(1);
-    
-    int ans = 1e9;
+    f(1, 1);
+
     for(int i=0; i<=n; i++){
         ans = min(ans, abs( n - subtree[i] - subtree[i]));
     }
