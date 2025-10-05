@@ -1,7 +1,8 @@
+dict1 = {'zero' : '0', 'one' : '1'}
 def solution(s):
-    answer = 0
-    s = s.replace('zero', '0')
-    s = s.replace('one', '1')
+    
+    for k, v in dict1.items():
+        s = s.replace(k, v);
     s = s.replace('two', '2')
     s = s.replace('three', '3')
     s = s.replace('four', '4')
